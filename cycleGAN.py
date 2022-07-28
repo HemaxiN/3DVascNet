@@ -1,4 +1,4 @@
-##https://machinelearningmastery.com/cyclegan-tutorial-with-keras/
+##code based on https://machinelearningmastery.com/cyclegan-tutorial-with-keras/
 
 #dataset directory
 #images_3D
