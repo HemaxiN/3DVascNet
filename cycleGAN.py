@@ -154,7 +154,7 @@ def define_composite_model(g_model_1, d_model, g_model_2, image_shape):
 
 def load_real_samples2(ix, img_shape, dir_):
     X1=zeros((len(ix),img_shape[0],img_shape[1],img_shape[2],img_shape[3]),dtype='float32')
-    X2=zeros((len(ix)img_shape[0],img_shape[1],img_shape[2],img_shape[3]),dtype='float32')
+    X2=zeros((len(ix),img_shape[0],img_shape[1],img_shape[2],img_shape[3]),dtype='float32')
     k=0
     for i in ix:
         image = tifffile.imread(os.path.join(dir_, 'images/'+str(i)+'.tif')) # RGB image
@@ -278,8 +278,8 @@ def train(d_model_A, d_model_B, g_model_AtoB, g_model_BtoA, c_model_AtoB, c_mode
             print('>%d, dA[%.3f,%.3f] dB[%.3f,%.3f] g[%.3f,%.3f]' % (i+1, dA_loss1,dA_loss2, dB_loss1,dB_loss2, g_loss1,g_loss2))
 
             res = {"dAlosses1": dA_loss1, "dAlosses2": dA_loss2, "dBlosses1": dB_loss1, "dBlosses2": dB_loss2, "glosses1": g_loss1, "glosses2": g_loss2}
-			row = len(losses_df)
-			losses_df.loc[row] = res
+            row = len(losses_df)
+            losses_df.loc[row] = res
 
             if (k+1) % (bat_per_epo * 1) == 0:
                 # save the models
