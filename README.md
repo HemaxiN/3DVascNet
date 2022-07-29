@@ -13,4 +13,4 @@ post_proc_main.py
 
 erosion.py (optional)
 
-evaluate.py
+eval_main.py
