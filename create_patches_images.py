@@ -8,7 +8,7 @@ save_dir = r'/mnt/2TBData/hemaxi/cycleGAN/ds/images'
 
 k=0 #iterator for the patches
 
-images_names = ['PBS_new_ret1', 'PBS_new_ret1b', 'sFLT1_ret2']
+images_names = ['PBS_new_ret1', 'PBS_new_ret1b', 'PBS_old_ret1']
 
 img_dir = r'/mnt/2TBData/hemaxi/Downloads/percentile'
 
@@ -35,7 +35,7 @@ for img in images_names:
 
     aux_sizes = [new_size_y, new_size_x]
     
-    ## zero padding
+    ## padding with small values 
     aux_img = np.random.randint(1,50,(aux_sizes[0], aux_sizes[1], 64))
     aux_img[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:np.shape(image)[2]] = image
     image = aux_img

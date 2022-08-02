@@ -8,7 +8,7 @@ save_dir = r'/mnt/2TBData/hemaxi/cycleGAN/ds/masks'
 
 k=0 #iterator for the patches
 
-masks_names = ['mask_PBS_new_ret1', 'mask_PBS_new_ret1b', 'mask_sFLT1_ret2']
+masks_names = ['mask_PBS_new_ret1', 'mask_PBS_new_ret1b', 'mask_PBS_old_ret1']
 
 msk_dir = r'/mnt/2TBData/hemaxi/Downloads/masks'
 

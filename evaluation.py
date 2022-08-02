@@ -26,27 +26,26 @@ def evaluate(img_dir, masks_dir, gt_dir_2dmasks, mode_):
 
     if mode_ == 'train':
 
-        images_names = ['PBS_new_ret1', 'PBS_new_ret1b', 'PBS_old_ret1', 'PBS_ret1-02', 
-        'PBS_ret4', 'sFLT1_ret1', 'sFLT1_ret2', 'sFLT1_ret3', 'VEGF_ret1', 
-        'VEGF_ret3', 'WT_retina_5']
+        images_names = ['PBS_new_ret1', 'PBS_new_ret1b', 'PBS_old_ret1']
 
         masks2d_names = ['PBS_new_ret1_stiched_mask', 'PBS_new_ret1b_stiched_mask', 
-        'PBS_old_ret1_mask', 'PBS_ret1-02-stiched_mask',  'PBS_ret4_stiched_mask', 
-        'sFlt1_ret2-02_mask', 'sFlt1_ret2-03_mask', 'sFLT1_ret3_mask', 'VEGF_ret1-02_mask',
-         'VEGF_ret1-03_mask', 'Wnt5aWT_PBS_Ret5_tile1_mask']
+        'PBS_old_ret1_mask']
 
-        crop_sizes =  [[4000,2700], [0,-2000], [-500, 3000], [-3000, 0], [-2500,0], [-1000,-2200],
-         [0, 5000], [-500,2200], [2000,3500], [-2500,0], [0, -3000]]
-
+        crop_sizes =  [[4000,2700], [0,-2000], [-500, 3000]]
 
     else:
 
-        images_names = ['WT_AngII_ret1','WT_AngII_ret2', 'VEGF_ret1b', 'Hemaxi_ICAM2']
+        images_names = ['WT_AngII_ret1','WT_AngII_ret2', 'VEGF_ret1b', 'Hemaxi_ICAM2', 'PBS_ret1-02', 
+        'PBS_ret4', 'sFLT1_ret1', 'sFLT1_ret2', 'sFLT1_ret3', 'VEGF_ret1', 
+        'VEGF_ret3', 'WT_retina_5']
 
         masks2d_names = ['Wnt5aWT_AngII_Ret7_tile1_mask','Wnt5aWT_AngII_Ret7_tile2_mask',
-        'VEGF_Ret1_tile1_stitched_mask', 'hemaxi_icam_2d_mask']
+        'VEGF_Ret1_tile1_stitched_mask', 'hemaxi_icam_2d_mask', 'PBS_ret1-02-stiched_mask',  'PBS_ret4_stiched_mask', 
+        'sFlt1_ret2-02_mask', 'sFlt1_ret2-03_mask', 'sFLT1_ret3_mask', 'VEGF_ret1-02_mask',
+         'VEGF_ret1-03_mask', 'Wnt5aWT_PBS_Ret5_tile1_mask']
 
-        crop_sizes = [[0,0], [0,0], [-1000, 4000], [0,0]]
+        crop_sizes = [[0,0], [0,0], [-1000, 4000], [0,0], [-3000, 0], [-2500,0], [-1000,-2200],
+         [0, 5000], [-500,2200], [2000,3500], [-2500,0], [0, -3000]]
 
 
     for img, mask2d, cropsize in zip(images_names, masks2d_names, crop_sizes):
