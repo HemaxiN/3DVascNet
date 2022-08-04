@@ -1,4 +1,4 @@
-from post_processing import *
+from utils.post_processing import *
 
 msk_dir = r'/mnt/2TBData/hemaxi/cycleGAN/26_05_2022/models_01_07/masks'  #3D masks (CycleGAN)
 save_dir_masks2d = r'/mnt/2TBData/hemaxi/cycleGAN/26_05_2022/models_01_07/results_proc'

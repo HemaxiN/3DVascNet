@@ -1,4 +1,4 @@
-from cycleGAN import *
+from utils.cycleGAN import *
 
 #directory with the training images and masks with the following tree structure
 '''

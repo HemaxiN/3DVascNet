@@ -1,4 +1,4 @@
-from prediction import *
+from utils.prediction import *
 
 model_dir = '/mnt/2TBData/hemaxi/cycleGAN/26_05_2022/models_02_07/1st/g_model_AtoB_000003.h5'
 img_dir = r'/mnt/2TBData/hemaxi/Downloads/percentile'
