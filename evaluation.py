@@ -19,7 +19,7 @@ from scipy import ndimage
 def evaluate(img_dir, masks_dir, gt_dir_2dmasks, mode_):
 
     #create the dataframe to save the results
-    results_df = pd.DataFrame(columns = ["Image", "NMI3D", "MI2D", "NMI2D", "DC"])
+    results_df = pd.DataFrame(columns = ["Image", "NMI3D", "MI2D", "NMI2D", "DC", "TP", "FP", "FN", "TN", "SP", "SN"])
     results_df.to_csv('results.csv', sep=';', index=False)
 
     print('Mode: {}'.format(mode_))
@@ -59,7 +59,7 @@ def evaluate(img_dir, masks_dir, gt_dir_2dmasks, mode_):
             image = image[:,:,0:64,:]
 
         #crop the image (according to the overlap between gt 2d mask and image)
-        image = image[:, :, :, 2]
+        #image = image[:, :, :, 2]
 
 
         if cropsize[0] !=0:
@@ -83,10 +83,10 @@ def evaluate(img_dir, masks_dir, gt_dir_2dmasks, mode_):
         mip_img = np.max(image, axis=2) #maximum intensity projection
         #print(np.max(mip_img))
 
-        minval = np.percentile(mip_img, 20) 
-        maxval = np.percentile(mip_img, 80)
-        mip_img = np.clip(mip_img, minval, maxval)
-        mip_img = ((mip_img - minval) / (maxval - minval)) * 255    
+        #minval = np.percentile(mip_img, 20) 
+        #maxval = np.percentile(mip_img, 80)
+        #mip_img = np.clip(mip_img, minval, maxval)
+        #mip_img = ((mip_img - minval) / (maxval - minval)) * 255    
         mip_img = mip_img.astype('uint8')
 
 
@@ -150,8 +150,16 @@ def evaluate(img_dir, masks_dir, gt_dir_2dmasks, mode_):
         print('Normalized Mutual Info Score 2D: {}'.format(nmis2d))
         print('----------------------------------------')
         
+        tp = np.sum(seg[gt==k]==k)
+        tn = np.sum(seg[gt==0]==0)
+        fn = np.sum(seg[gt==k]==0)
+        fp = np.sum(seg[gt==0]==k)
 
-        res = {"Image": img, "NMI3D": nmis3d, "MI2D": mis2d, "NMI2D": nmis2d, "DC": dice}
+        sens = tp/(tp+fn) #sensitivity
+        spec = tn/(tn+fp) #specificity
+
+        res = {"Image": img, "NMI3D": nmis3d, "MI2D": mis2d, "NMI2D": nmis2d, "DC": dice, 
+        "TP": tp, "FP": fp, "FN": fn, "TN": tn, "SP": spec, "SN": sens}
         row = len(results_df)
         results_df.loc[row] = res
 
