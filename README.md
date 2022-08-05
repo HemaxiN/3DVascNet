@@ -42,7 +42,8 @@ Python 3.5.2, Keras 2.2.4 and other packages listed in [requirements.txt](https:
 
 ## Acknowledgements
 
-* Code based on the [2D implementation of the cycleGAN](https://machinelearningmastery.com/cyclegan-tutorial-with-keras/).
+* Code based on the [2D implementation of the cycleGAN](https://machinelearningmastery.com/cyclegan-tutorial-with-keras/);
+* [STL2Voxel](https://github.com/cpederkoff/stl-to-voxel).
 
 
 create_patches_images.py
