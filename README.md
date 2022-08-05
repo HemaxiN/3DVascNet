@@ -20,11 +20,11 @@ To create the training patches (images and masks) use the files [create_patches_
 Run the file [train_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/train_main.py) after changing the parameters defined in this file.
 The `train_dir` contains the following tree structure:
 
-'''
+```
 train_dir
    ├── images  0.tif, 1.tif, ..., N.tif (patches of microscopy images of vessels  (Z_slices, X_dim, Y_dim, Channels))
    └── masks   0.tif, 1.tif, ..., N.tif (patches of segmentation masks of vessels  (Z_slices, X_dim, Y_dim, Channels))
-'''   
+```
 
 
 ## Prediction
