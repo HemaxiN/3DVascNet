@@ -22,8 +22,8 @@ The `train_dir` contains the following tree structure:
 
 ```
 train_dir
-   ├── images  0.tif, 1.tif, ..., N.tif (patches of microscopy images of vessels  (Z_slices, X_dim, Y_dim, Channels))
-   └── masks   0.tif, 1.tif, ..., N.tif (patches of segmentation masks of vessels  (Z_slices, X_dim, Y_dim, Channels))
+   ├── images  0.tif, 1.tif, ..., N.tif (patches of microscopy images of vessels  (Z_slices, X_dim, Y_dim))
+   └── masks   0.tif, 1.tif, ..., N.tif (patches of segmentation masks of vessels  (Z_slices, X_dim, Y_dim))
 ```
 
 
@@ -44,19 +44,3 @@ Python 3.5.2, Keras 2.2.4 and other packages listed in [requirements.txt](https:
 
 * Code based on the [2D implementation of the cycleGAN](https://machinelearningmastery.com/cyclegan-tutorial-with-keras/);
 * [STL2Voxel](https://github.com/cpederkoff/stl-to-voxel).
-
-
-create_patches_images.py
-create_patches_masks.py
-
-create_background_patches.py (optional)
-
-train_main.py
-
-predict_main.py
-
-post_proc_main.py
-
-erosion.py (optional)
-
-eval_main.py
