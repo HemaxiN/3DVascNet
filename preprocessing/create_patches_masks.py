@@ -53,17 +53,6 @@ for msk in masks_names:
             #_slice = _slice/255.0
             _slice = _slice.astype('uint8')
 
-
-            #if random.uniform(0,1)>0.5:
-            #if True:
-                #print('Perform binary_erosion')
-                #print(str(k))
-            #    rad = np.random.choice([7,9,11])
-            #    _slice = morphology.binary_erosion(_slice, morphology.ball(radius=rad))
-
-
-            #_slice = _slice*255.0
-            #_slice = _slice.astype('uint8')
             _slice = _slice.transpose(2,0,1)
 
             imwrite(os.path.join(save_dir, str(k)+'.tif'), _slice)
