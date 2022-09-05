@@ -7,7 +7,7 @@ import numpy as np
 from tifffile import imread, imwrite
 from sklearn.metrics import mutual_info_score
 from skimage.measure import compare_ssim as ssim
-from sklearn.metrics.cluster import normalized_mutual_info_score
+#from sklearn.metrics.cluster import normalized_mutual_info_score
 import warnings
 warnings.filterwarnings("ignore")
 import pandas as pd
@@ -15,6 +15,20 @@ from skimage.measure import label, regionprops
 from skimage import morphology
 from scipy import ndimage
 
+def normalized_mutual_information(x,y):
+    #joint histogram
+    hgram, x_edges, y_edges = np.histogram2d(x.ravel(), y.ravel(), bins=20)
+    hgram = hgram+EPS
+    #joint probability distribution
+    pxy = hgram/float(np.sum(hgram))
+    #marginal x
+    px = np.sum(pxy, axis=1)
+    #marginal y
+    py = np.sum(pxy, axis=0)
+    #broadcast to multiply marginals
+    px_py = px[:,None] * py[None, :]
+    nzs = pxy>0 #consider only non zero values
+    return (np.sum(pxy[nzs] * np.log(pxy[nzs] / px_py[nzs]))) / (np.sum(-pxy*np.log(pxy)))
 
 def evaluate(img_dir, masks_dir, gt_dir_2dmasks, mode_):
 
@@ -146,7 +160,7 @@ def evaluate(img_dir, masks_dir, gt_dir_2dmasks, mode_):
         mis2d = mutual_info_score(mip_img.ravel(), seg.ravel())
         print('Mutual Info Score 2D: {}'.format(mis2d))
 
-        nmis2d = normalized_mutual_info_score(mip_img.ravel(), seg.ravel())
+        nmis2d = normalized_mutual_information(mip_img.ravel(), seg.ravel())
         print('Normalized Mutual Info Score 2D: {}'.format(nmis2d))
         print('----------------------------------------')
         
