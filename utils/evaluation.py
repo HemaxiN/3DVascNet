@@ -123,7 +123,7 @@ def evaluate(img_dir, masks_dir, gt_dir_2dmasks, mode_):
         #mis3d = mutual_info_score(image.ravel(), final_mask.ravel())
         #print('Mutual Info Score 3D: {}'.format(mis3d))
 
-        nmis3d = normalized_mutual_info_score(image.ravel(), seg3d.ravel())
+        nmis3d = normalized_mutual_information(image.ravel(), seg3d.ravel())
         print('Normalized Mutual Info Score 3D: {}'.format(nmis3d))
         print('----------------------------------------')
 
