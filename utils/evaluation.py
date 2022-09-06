@@ -15,6 +15,8 @@ from skimage.measure import label, regionprops
 from skimage import morphology
 from scipy import ndimage
 
+EPS = np.finfo(float).eps
+
 def normalized_mutual_information(x,y):
     #joint histogram
     hgram, x_edges, y_edges = np.histogram2d(x.ravel(), y.ravel(), bins=20)
