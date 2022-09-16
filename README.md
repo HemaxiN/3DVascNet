@@ -5,9 +5,8 @@ This repository contains the Python implementation of a 3D cycleGAN model to seg
 
 ## Architecture
 
-![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/generator2cyclegan.png)
+![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/architecturegit.png)
 
-![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/discriminatorcyclegan.png)
 
 
 ## Dataset
