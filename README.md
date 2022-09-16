@@ -1,5 +1,5 @@
 # 3D Vessel Segmentation
-Semi-Supervised 3D Vessel Segmentation in Microscopy Images of Mouse Retinas 
+A Deep Learning-Based Approach for 3D Vessel Segmentation in Microscopy Images of Mouse Retinas 
 
 This repository contains the Python implementation of a 3D cycleGAN model to segment blood vessels in 3D microscopy images of mouse retinas.
 
