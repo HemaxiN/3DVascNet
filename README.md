@@ -12,6 +12,7 @@ This repository contains the Python implementation of a 3D cycleGAN model to seg
 ## Dataset
 
 Our dataset contains 3D microscopy images of mouse retinas and the corresponding 2D segmentation masks (annotated manually based on the maximum intensity projection (MIP) images of the 3D microscopy images). Moreover, we have the 3D segmentation masks obtained based on the 2D segmentation masks using [PolNet](https://github.com/mobernabeu/polnet).
+The dataset is made publicly available [here](https://huggingface.co/datasets/Hemaxi/3DVesselSegmentation).
 
 
 ## Pre-Processing
