@@ -62,6 +62,11 @@ Post-Processing methods can be applied to the predicted segmentation masks using
 * SP: specificity
 * SN: sensitivity
 
+
+## Model
+
+The model that achieved the best performance is made publicly available [here](https://huggingface.co/Hemaxi/3DCycleGAN/tree/main).
+
 ## Requirements
 
 Python 3.5.2, Keras 2.2.4 and other packages listed in [requirements.txt](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/utils/requirements.txt).
