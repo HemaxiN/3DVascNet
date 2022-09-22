@@ -97,7 +97,7 @@ def predict(model_dir, img_dir, save_dir_2dmasks, save_dir_3dmasks, mode_, patch
 	    aux_sizes = [new_size_y, new_size_x]
 	    
 	    ## zero padding
-	    aux_img = np.random.randint(1,14,(aux_sizes[0], aux_sizes[1], 64))
+	    aux_img = np.random.randint(1,50,(aux_sizes[0], aux_sizes[1], 64))
 	    aux_img[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:np.shape(image)[2]] = image
 	    image = aux_img
 	    del aux_img
