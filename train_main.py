@@ -13,7 +13,7 @@ train_dir = r'/dev/shm/dataset3d'
 image_shape = (64,128,128,1)
 
 #number of patches in the training set
-n_patches = 10
+n_patches = 4987
 
 #number of epochs and batch size
 nbepochs, batchsize = 5, 1
