@@ -5,7 +5,7 @@ import numpy as np
 img_dir = r'/dev/shm/dataset3d/images'
 msk_dir = r'/dev/shm/dataset3d/masks'
 
-for i in range(3093, 3500):
+for i in range(4987, 5500):
 	image = np.random.randint(0,50,(64,128,128))
 	mask = np.zeros((64,128,128))
 
