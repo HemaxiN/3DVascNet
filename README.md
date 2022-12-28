@@ -1,7 +1,7 @@
 # 3D Vessel Segmentation
-A Deep Learning-Based Approach for 3D Vessel Segmentation in Microscopy Images of Mouse Retinas 
+A Deep Learning-Based Approach for 3D Vessel Segmentation and Quantification in Microscopy Images of Mouse Retinas 
 
-This repository contains the Python implementation of a 3D cycleGAN model to segment blood vessels in 3D microscopy images of mouse retinas.
+This repository contains the Python implementation of a 3D cycleGAN model to segment blood vessels in 3D microscopy images of mouse retinas. Moreover, it contains the code of the automatic pipeline developed for the quantification of the vascular network based on the segmentation masks.
 
 ## Architecture
 
@@ -68,6 +68,10 @@ Post-Processing methods can be applied to the predicted segmentation masks using
 ## Model
 
 The model that achieved the best performance is made publicly available [here](https://huggingface.co/Hemaxi/3DCycleGAN/tree/main).
+
+## Vasculature Quantification
+
+The code for feature extraction from the segmentation masks of vessels is provided in the jupyter notebook [Vasculature_Quantification.ipynb](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/Vasculature_Quantification.ipynb)
 
 ## Requirements
 
