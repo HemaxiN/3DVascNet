@@ -21,6 +21,15 @@ The dataset is made publicly available [here](https://huggingface.co/datasets/He
 
 To apply the pre-processing vessel enhancement method run the file [percentile.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/percentile.py). Moreover, the code to convert the ```.stl``` objects (3D segmentation masks obtained with [PolNet](https://github.com/mobernabeu/polnet)) into 3D ```.tif``` files is provided in the jupyter notebook [STL2Voxel.ipynb](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/STL2Voxel.ipynb).
 
+
+## Testing the Pre-trained Model on Your Own Dataset
+
+Firstly, download the weights of the pre-trained model.
+
+This implementation supports the segmentation of images with any dimensions along x and y, however the number of z slices should be 64 or less.
+In the future, we will 
+If this model does not work well on your images you can train the cycleGAN model using the images of your dataset.
+
 ## Training on Your Own Dataset
 
 
