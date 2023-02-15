@@ -14,7 +14,11 @@ This repository contains the Python implementation of a 3D cycleGAN model to seg
 ## Dataset
 
 Our dataset contains 3D microscopy images of mouse retinas and the corresponding 2D segmentation masks (annotated manually based on the maximum intensity projection (MIP) images of the 3D microscopy images). Moreover, we have the 3D segmentation masks obtained based on the 2D segmentation masks using [PolNet](https://github.com/mobernabeu/polnet).
-The dataset is made publicly available [here](https://huggingface.co/datasets/Hemaxi/3DVesselSegmentation/tree/main).
+The dataset *will be soon* made publicly available [here](https://huggingface.co/datasets/Hemaxi/3DVesselSegmentation/tree/main).
+
+## Requirements
+
+Python 3.5.2, Keras 2.2.4 and other packages listed in [requirements.txt](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/utils/requirements.txt).
 
 
 ## Pre-Processing
@@ -27,8 +31,8 @@ To apply the pre-processing vessel enhancement method run the file [percentile.p
 Firstly, download the weights of the pre-trained model.
 
 This implementation supports the segmentation of images with any dimensions along x and y, however the number of z slices should be 64 or less.
-In the future, we will 
-If this model does not work well on your images you can train the cycleGAN model using the images of your dataset.
+In the future, we will extend the implementation to work on images with any dimensions along the z dimension as well.
+If the pre-trained model does not work well on your images you can train the cycleGAN model using the images of your dataset.
 
 ## Training on Your Own Dataset
 
@@ -84,9 +88,7 @@ The code for feature extraction from the segmentation masks of vessels is provid
 To define the region of interest we computed the concave hull for each segmentation mask using this [implementation](https://github.com/sebastianbeyer/concavehull).
 More details are presented here [ConcaveHull](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/ConcaveHull).
 
-## Requirements
 
-Python 3.5.2, Keras 2.2.4 and other packages listed in [requirements.txt](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/utils/requirements.txt).
 
 
 ## Acknowledgements
