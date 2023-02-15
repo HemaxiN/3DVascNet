@@ -82,7 +82,7 @@ The model that achieved the best performance is made publicly available [here](h
 
 The code for feature extraction from the segmentation masks of vessels is provided in the jupyter notebook [Vasculature_Quantification.ipynb](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/Vasculature_Quantification.ipynb)
 To define the region of interest we computed the concave hull for each segmentation mask using this [implementation](https://github.com/sebastianbeyer/concavehull).
-More details are presented here [ConcaveHull](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/ConcaveHull)
+More details are presented here [ConcaveHull](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/ConcaveHull).
 
 ## Requirements
 
