@@ -16,7 +16,7 @@ import warnings
 warnings.filterwarnings("ignore")
 import pandas as pd
 
-def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_, patch_size, _step):
+def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_, patch_size, _step, _step_z=32):
 
     # load the models
     cust = {'InstanceNormalization': InstanceNormalization}
@@ -104,68 +104,74 @@ def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_
         print('----------------------------------------')
 
         #image size
-        size_y = np.shape(image)[0]
-        size_x = np.shape(image)[1]
-        size_depth = np.shape(image)[2]
-        aux_sizes_or = [size_y, size_x]
-
+        size_y = np.shape(img3d)[0]
+        size_x = np.shape(img3d)[1]
+        size_depth = np.shape(img3d)[2]
+        aux_sizes_or = [size_y, size_x, size_depth]
+        
         #patch size
         new_size_y = int((size_y/_patch_size) + 1) * _patch_size
         new_size_x = int((size_x/_patch_size) + 1) * _patch_size
-
-        aux_sizes = [new_size_y, new_size_x]
-          
+        new_size_z = int((size_depth/_patch_size_z) + 1) * _patch_size_z
+        
+        aux_sizes = [new_size_y, new_size_x, new_size_z]
+        
         ## zero padding
-        aux_img = np.random.randint(1,50,(aux_sizes[0], aux_sizes[1], 64))
-        aux_img[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:np.shape(image)[2]] = image
+        aux_img = np.random.randint(1,11,(aux_sizes[0], aux_sizes[1], aux_sizes[2]))
+        aux_img[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:aux_sizes_or[2]] = img3d
         image = aux_img
         del aux_img
-
-        print('Padded Image Shape: {}'.format(image.shape))
-        print('----------------------------------------')
-
+            
+        
         final_mask_foreground = np.zeros((np.shape(image)[0], np.shape(image)[1], np.shape(image)[2]))
         final_mask_background = np.zeros((np.shape(image)[0], np.shape(image)[1], np.shape(image)[2]))
         final_mask_background = final_mask_background.astype('uint8')
         final_mask_foreground = final_mask_foreground.astype('uint8')
-
+        
         i=0
 
         #load the model
-        model_BtoA = load_model(model_dir, cust)
+        model_BtoA = load_model('model.h5', cust)
 
         while i+_patch_size<=image.shape[0]:
             j=0
             while j+_patch_size<=image.shape[1]:
-                B_real = np.zeros((1,_nbslices,_patch_size,_patch_size,patch_size[3]),dtype='float32')
-                _slice = image[i:i+_patch_size, j:j+_patch_size,:]
-                _slice = _slice.transpose(2,0,1)
-                _slice = np.expand_dims(_slice, axis=-1)
-                B_real[0,:]=(_slice-127.5) /127.5   
-
-                A_generated  = model_BtoA.predict(B_real)
-
-                A_generated = (A_generated + 1)/2 #from [-1,1] to [0,1]
-
-                A_generated = A_generated[0,:,:,:,0]
-                A_generated = A_generated.transpose(1,2,0)
-
-                #print(np.unique(A_generated))
-                A_generated = (A_generated>0.5)*1
-
-                A_generated = A_generated.astype('uint8')
-
-                final_mask_foreground[i:i+_patch_size, j:j+_patch_size,:] = final_mask_foreground[i:i+_patch_size, j:j+_patch_size,:] + A_generated
-                final_mask_background[i:i+_patch_size, j:j+_patch_size,:] = final_mask_background[i:i+_patch_size, j:j+_patch_size,:] + (1-A_generated)
-
-                  
+                k=0
+                while k+_patch_size_z<=image.shape[2]:
+                
+                    B_real = np.zeros((1,_nbslices,_patch_size,_patch_size,1),dtype='float32')
+                    _slice = image[i:i+_patch_size, j:j+_patch_size, k:k+_patch_size_z]
+                    
+                    _slice = _slice.transpose(2,0,1)
+                    _slice = np.expand_dims(_slice, axis=-1)
+        
+                    B_real[0,:]=(_slice-127.5) /127.5   
+        
+                    A_generated  = model_BtoA.predict(B_real)
+        
+                    A_generated = (A_generated + 1)/2 #from [-1,1] to [0,1]
+        
+                    A_generated = A_generated[0,:,:,:,0]
+                    A_generated = A_generated.transpose(1,2,0)
+        
+                    #print(np.unique(A_generated))
+                    A_generated = (A_generated>0.5)*1
+        
+                    A_generated = A_generated.astype('uint8')
+        
+                    final_mask_foreground[i:i+_patch_size, j:j+_patch_size, k:k+_patch_size_z] = final_mask_foreground[i:i+_patch_size, j:j+_patch_size, k:k+_patch_size_z] + A_generated
+                    final_mask_background[i:i+_patch_size, j:j+_patch_size, k:k+_patch_size_z] = final_mask_background[i:i+_patch_size, j:j+_patch_size, k:k+_patch_size_z] + (1-A_generated)
+                    
+                    k=k+_step_z
                 j=j+_step
             i=i+_step
+
 
         del _slice
         del A_generated
         del B_real
         del model_BtoA
+
 
         final_mask = (final_mask_foreground>=final_mask_background)*1
 
@@ -173,7 +179,7 @@ def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_
         print('Image Shape: {}'.format(image.shape))
         print('----------------------------------------')
 
-        final_mask = final_mask[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:size_depth]
+        final_mask = final_mask[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:aux_sizes_or[2]]
         print('Mask Shape: {}'.format(final_mask.shape))
         print('----------------------------------------')
         final_mask = final_mask*255.0
