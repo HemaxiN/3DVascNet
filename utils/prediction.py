@@ -104,9 +104,9 @@ def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_
         print('----------------------------------------')
 
         #image size
-        size_y = np.shape(img3d)[0]
-        size_x = np.shape(img3d)[1]
-        size_depth = np.shape(img3d)[2]
+        size_y = np.shape(image)[0]
+        size_x = np.shape(image)[1]
+        size_depth = np.shape(image)[2]
         aux_sizes_or = [size_y, size_x, size_depth]
         
         #patch size
@@ -118,7 +118,7 @@ def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_
         
         ## zero padding
         aux_img = np.random.randint(1,11,(aux_sizes[0], aux_sizes[1], aux_sizes[2]))
-        aux_img[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:aux_sizes_or[2]] = img3d
+        aux_img[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:aux_sizes_or[2]] = image
         image = aux_img
         del aux_img
             
