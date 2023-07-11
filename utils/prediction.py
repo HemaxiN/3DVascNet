@@ -16,7 +16,7 @@ import warnings
 warnings.filterwarnings("ignore")
 import pandas as pd
 
-def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_, patch_size, _step, _step_z=32):
+def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_, patch_size, _step, _step_z=32, _patch_size_z = 64):
 
     # load the models
     cust = {'InstanceNormalization': InstanceNormalization}
