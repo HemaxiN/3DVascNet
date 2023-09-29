@@ -93,7 +93,7 @@ More details are presented here [ConcaveHull](https://github.com/HemaxiN/3DVesse
 ## Graphical User Interface - 3DVascNet
 
 3DVascNet is available as a GUI that allows to automatically analyse 3D microscopy images of retinal blood vessels.
-Instructions for downloading and using our 3DVascNet software can be found [here]().
+Instructions for downloading and using our 3DVascNet software can be found [here](https://github.com/HemaxiN/3DVascNet/wiki/Downloading-and-Running-3DVascNet).
 
 ![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/interface.png)
 
