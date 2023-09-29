@@ -86,7 +86,22 @@ The model that achieved the best performance is made publicly available [here](h
 
 ## Vasculature Quantification
 
-The code for feature extraction from the segmentation masks of vessels is provided in the jupyter notebook [Vasculature_Quantification.ipynb](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/Vasculature_Quantification.ipynb)
+The code for feature extraction from the segmentation masks of vessels is provided in this [script](https://github.com/HemaxiN/3DVascNet/blob/main/quantification.py). 
+First, you should change the ```masks_dir```and ```resolution_file```variables, which correspond respectively to the directory where the 3D post-processed masks are saved and the path to a resolution.xlsx file containing details about the voxel's physical sizes for each image.
+The resolution.xlsx file should have the following structure:
+
+![](https://github.com/HemaxiN/3DVascNet/blob/main/images/resolutionfile.PNG)
+
+After running [quantification.py](https://github.com/HemaxiN/3DVascNet/blob/main/quantification.py), a features3d.csv file will be generated containing the computed 3D features for each mask, it will have the following structure:
+
+```
+| Image        | Group | Branching Points Density | Vessel Density % | Avascular Area % | Mean Branch Length | Mean Vessel Radius |
+|--------------|-------|--------------------------|------------------|------------------|--------------------|--------------------|
+| Image_Name_1 |       |                          |                  |                  |                    |                    |  
+| Image_Name_2 |       |                          |                  |                  |                    |                    |    
+| Image_Name_3 |       |                          |                  |                  |                    |                    |    
+```
+
 To define the region of interest we computed the concave hull for each segmentation mask using this [implementation](https://github.com/sebastianbeyer/concavehull).
 More details are presented here [ConcaveHull](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/ConcaveHull).
 
