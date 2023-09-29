@@ -89,6 +89,19 @@ The code for feature extraction from the segmentation masks of vessels is provid
 To define the region of interest we computed the concave hull for each segmentation mask using this [implementation](https://github.com/sebastianbeyer/concavehull).
 More details are presented here [ConcaveHull](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/ConcaveHull).
 
+## Graphical User Interface - 3DVascNet
+
+3DVascNet is available as a GUI that allows to automatically analyse 3D microscopy images of retinal blood vessels.
+A detailed explanation of the installation and step-by-step use of 3DVascNet’s GUI can be found [here]().
+
+![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/interface.png)
+
+
+
+
+
+
+
 
 
 
