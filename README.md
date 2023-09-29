@@ -57,7 +57,7 @@ To test the trained model on new images specify the directories in file [predict
 
 ### Post-Processing and Evaluation
 
-Post-Processing methods can be applied to the predicted segmentation masks using the files [post_proc_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/post_proc_main.py) and [erosion.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/erosion.py); and the performance of the model can be evaluated using [eval_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/eval_main.py), which writes a ```results.csv```file:
+Post-Processing methods can be applied to the predicted segmentation masks using the file [post_proc_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/post_proc_main.py); and the performance of the model can be evaluated using [eval_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/eval_main.py), which writes a ```results.csv```file:
 
 ```
 | Image        | NMI3D | MI2D | NMI2D | DC | TP | FP | FN | TN | SP | SN |
