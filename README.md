@@ -30,10 +30,10 @@ To apply the pre-processing vessel enhancement method run the file [percentile.p
 
 ### Testing the Pre-trained Model on Your Own Dataset
 
-Firstly, download the weights of the pre-trained model.
+Firstly, download the weights of the [pre-trained model](https://huggingface.co/Hemaxi/3DCycleGAN/tree/main).
 
-This implementation supports the segmentation of images with any dimensions along x and y, however the number of z slices should be 64 or less.
-In the future, we will extend the implementation to work on images with any dimensions along the z dimension as well.
+This implementation supports the segmentation of images with any dimensions along x and y, and z.
+The images should be .tif files.
 If the pre-trained model does not work well on your images you can train the cycleGAN model using the images of your dataset.
 
 ### Training on Your Own Dataset
