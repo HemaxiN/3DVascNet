@@ -34,7 +34,7 @@ Firstly, download the weights of the [pre-trained model](https://huggingface.co/
 
 This implementation supports the segmentation of images with any dimensions along x and y, and z.
 The images should be .tif files.
-If the pre-trained model does not work well on your images you can train the cycleGAN model using the images of your dataset.
+If the pre-trained model does not work well on your images you can train the cycleGAN model using the images of your dataset, and [masks of our dataset](https://huggingface.co/datasets/Hemaxi/3DVesselSegmentation/tree/main).
 
 ### Training on Your Own Dataset
 
