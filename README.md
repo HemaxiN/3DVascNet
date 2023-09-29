@@ -33,7 +33,7 @@ To apply the pre-processing vessel enhancement method run the file [percentile.p
 Firstly, download the weights of the [pre-trained model](https://huggingface.co/Hemaxi/3DCycleGAN/tree/main).
 
 This implementation supports the segmentation of images with any dimensions along x and y, and z.
-The images should be .tif files.
+The images should be .tif files, the images' names should have a prefix denoting its group (for instance 'GroupName_Image1.tif).
 If the pre-trained model does not work well on your images you can train the cycleGAN model using the images of your dataset, and [masks of our dataset](https://huggingface.co/datasets/Hemaxi/3DVesselSegmentation/tree/main).
 
 ### Training on Your Own Dataset
@@ -60,11 +60,11 @@ To test the trained model on new images specify the directories in file [predict
 Post-Processing methods can be applied to the predicted segmentation masks using the file [post_proc_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/post_proc_main.py); and the performance of the model can be evaluated using [eval_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/eval_main.py), which writes a ```results.csv```file:
 
 ```
-| Image        | NMI3D | MI2D | NMI2D | DC | TP | FP | FN | TN | SP | SN |
-|--------------|-------|------|-------|----|----|----|----|----|----|----|
-| Image_Name_1 |       |      |       |    |    |    |    |    |    |    |
-| Image_Name_2 |       |      |       |    |    |    |    |    |    |    |
-| Image_Name_3 |       |      |       |    |    |    |    |    |    |    |
+| Image         | NMI3D | MI2D | NMI2D | DC | TP | FP | FN | TN | SP | SN |
+|---------------|-------|------|-------|----|----|----|----|----|----|----|
+| GroupA_Image1 |       |      |       |    |    |    |    |    |    |    |
+| GroupB_Image2 |       |      |       |    |    |    |    |    |    |    |
+| GroupA_Image3 |       |      |       |    |    |    |    |    |    |    |
 ```
 
 
@@ -92,7 +92,7 @@ The resolution.xlsx file should have the following structure:
 
 ![](https://github.com/HemaxiN/3DVascNet/blob/main/images/resolutionfile.PNG)
 
-The images' names should have a prefix denoting its group (for instance 'GroupName_Image1.tif). This is important to later visualize the distributions of the vascular features by grouping images belonging to the same group.
+As stated above, the images' names should have a prefix denoting its group (for instance 'GroupName_Image1.tif). This is important to later visualize the distributions of the vascular features by grouping images belonging to the same group.
 After running [quantification.py](https://github.com/HemaxiN/3DVascNet/blob/main/quantification.py), a features3d.csv file will be generated containing the computed 3D features for each mask, it will have the following structure:
 
 ```
