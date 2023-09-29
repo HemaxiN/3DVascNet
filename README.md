@@ -92,6 +92,7 @@ The resolution.xlsx file should have the following structure:
 
 ![](https://github.com/HemaxiN/3DVascNet/blob/main/images/resolutionfile.PNG)
 
+The images' names should have a prefix denoting its group (for instance 'GroupName_Image1.tif). This is important to later visualize the distributions of the vascular features by grouping images belonging to the same group.
 After running [quantification.py](https://github.com/HemaxiN/3DVascNet/blob/main/quantification.py), a features3d.csv file will be generated containing the computed 3D features for each mask, it will have the following structure:
 
 ```
