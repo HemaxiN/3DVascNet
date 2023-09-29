@@ -2,8 +2,9 @@
 
 This repository contains the Python implementation of a 3D CycleGAN model to segment blood vessels in 3D microscopy images of mouse retinas. It also contains the code of the automatic pipeline developed for the quantification of the vascular network based on the segmentation masks. Moreover, the instructions for downloading and using our interface can be found in [this repository](https://github.com/HemaxiN/3DVascNet/tree/main#graphical-user-interface---3dvascnet).
 
+## Segmentation
 
-## Architecture
+### Architecture
 
 ![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/overview.png)
 
@@ -11,23 +12,23 @@ This repository contains the Python implementation of a 3D CycleGAN model to seg
 
 
 
-## Dataset
+### Dataset
 
 Our dataset contains 3D microscopy images of mouse retinas and the corresponding 2D segmentation masks (annotated manually based on the maximum intensity projection (MIP) images of the 3D microscopy images). Moreover, we have the 3D segmentation masks obtained based on the 2D segmentation masks using [PolNet](https://github.com/mobernabeu/polnet).
 The dataset *will be soon* made publicly available [here](https://huggingface.co/datasets/Hemaxi/3DVesselSegmentation/tree/main).
 
-## Requirements
+### Requirements
 
 Python 3.5.2, Keras 2.2.4 and other packages listed in [requirements.txt](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/utils/requirements.txt).
 
 If you are having issues installing keras_contrib, use: ```pip install git+https://www.github.com/keras-team/keras-contrib.git```.
 
-## Pre-Processing
+### Pre-Processing
 
 To apply the pre-processing vessel enhancement method run the file [percentile.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/percentile.py). Moreover, the code to convert the ```.stl``` objects (3D segmentation masks obtained with [PolNet](https://github.com/mobernabeu/polnet)) into 3D ```.tif``` files is provided in the jupyter notebook [STL2Voxel.ipynb](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/STL2Voxel.ipynb).
 
 
-## Testing the Pre-trained Model on Your Own Dataset
+### Testing the Pre-trained Model on Your Own Dataset
 
 Firstly, download the weights of the pre-trained model.
 
@@ -35,7 +36,7 @@ This implementation supports the segmentation of images with any dimensions alon
 In the future, we will extend the implementation to work on images with any dimensions along the z dimension as well.
 If the pre-trained model does not work well on your images you can train the cycleGAN model using the images of your dataset.
 
-## Training on Your Own Dataset
+### Training on Your Own Dataset
 
 
 To create the training patches (images and masks) use the files [create_patches_images.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/create_patches_images.py) and [create_patches_masks.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/create_patches_masks.py), respectively. Furthermore, patches representing the background can be created running the file [create_background_patches.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/create_background_patches.py).
@@ -50,11 +51,11 @@ train_dir
 ```
 
 
-## Prediction
+### Prediction
 
 To test the trained model on new images specify the directories in file [predict_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/predict_main.py) and run it.
 
-## Post-Processing and Evaluation
+### Post-Processing and Evaluation
 
 Post-Processing methods can be applied to the predicted segmentation masks using the files [post_proc_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/post_proc_main.py) and [erosion.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/erosion.py); and the performance of the model can be evaluated using [eval_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/eval_main.py), which writes a ```results.csv```file:
 
@@ -79,7 +80,7 @@ Post-Processing methods can be applied to the predicted segmentation masks using
 * SN: sensitivity
 
 
-## Model
+### Model
 
 The model that achieved the best performance is made publicly available [here](https://huggingface.co/Hemaxi/3DCycleGAN/tree/main).
 
