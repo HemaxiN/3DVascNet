@@ -1,100 +1,28 @@
 # example of using saved cycleGAN models for image translation
 #based on https://machinelearningmastery.com/cyclegan-tutorial-with-keras/
 from keras.models import load_model
-from numpy import load
-from numpy import vstack
-from matplotlib import pyplot
-from numpy.random import randint
 from keras_contrib.layers.normalization.instancenormalization import InstanceNormalization
 import os
 import numpy as np
 from tifffile import imread, imwrite
-from sklearn.metrics import mutual_info_score
-from skimage.measure import compare_ssim as ssim
-from sklearn.metrics.cluster import normalized_mutual_info_score
 import warnings
 warnings.filterwarnings("ignore")
-import pandas as pd
 
-def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_, patch_size, _step, _step_z=32, _patch_size_z = 64):
+def predict(model_dir, img_dir, save_dir_2dmasks, save_dir_3dmasks, mode_, patch_size, _step, _step_z=32, _patch_size_z=64):
 
-    # load the models
     cust = {'InstanceNormalization': InstanceNormalization}
+    #load the model
+    model_BtoA = load_model(model_dir, cust)
 
     print('Mode: {}'.format(mode_))
-
-    if mode_ == 'train':
-
-        images_names = ['PBS_new_ret1', 'sFLT1_ret1', 'VEGF_ret1', 'WT_AngII_ret1', 'PBS_new_ret1b', 'PBS_old_ret1','WT_AngII_ret2', 'VEGF_ret1b', 'Hemaxi_ICAM2', 'PBS_ret1-02', 
-        'PBS_ret4', 'sFLT1_ret2', 'sFLT1_ret3', 
-        'VEGF_ret3', 'WT_retina_5', 'Captopril_new_ret1_stiched.tif', 'Captopril_new_ret2_stiched.tif',
-        'Captopril_new_ret3_stitched.tif', 'iROCK_ret3_stiched.tif','Maria_Captopril_ret6_stiched.tif', 'PBS_ret1-02-stiched.tif',
-        'Ret4_Maria_Captopril_1-stiched.tif', 'Ret5_Maria_Captopril_2-stiched.tif',
-        'RGDS-stitched-ret1.tif', 'RGDS-stitched-ret2.tif', 'RGDS-stitched-ret3.tif','RGDS-stitched-ret4.tif','sFlt1_ret4.tif',
-        'sFlt1_ret5.tif', 'VEGF_ret4.tif', 'VEGF_ret5.tif', 'VEGF_ret6.tif', 'VEGF_ret7.tif', 
-        'FLIJ10_TG_stiching_2ndExp_1.tif', 'FLIJ11_TG_stiching_2ndExp_1.tif', 
-          'FLIJ7_TG_stiching_1.tif', 'FLIJ7_TG_stiching_2ndExp_1.tif', 
-          'FLIJ8_WT_stiching_2ndExp_1.tif', 'FLIJ9_TG_stiching_1.tif', 
-          'FLIJ9_TG_stiching_2ndExp_1.tif', 'FLIO1a_TG_stiching_2ndExp_2.tif', 
-          'FLIO1b_TG_stiching_2ndExp_1.tif', 'FLIO4_TG_stiching_2ndExp_1.tif', 
-          'FLIO5_TG_stiching_2ndExp_1.tif', 'FLIO6_TG_stiching_1.tif',
-          'FLIO6_TG_stiching_2.tif', 'FLIO6_TG_stiching_3.tif', 
-           'FLIO8_TG_stiching_1.tif', 
-          'FLIP1_TG_stiching_1.tif', 'FLIP1_TG_stiching_1Exp_1.tif',
-          'FLIP1_TG_stiching_1Exp_2.tif', 'FLIP1_TG_stiching_1Exp_3.tif', 
-          'FLIP1_TG_stiching_2.tif', 'FLIP5_WT_stiching_2ndExp_1.tif', 
-          'yesretinas_a_WT1_C1.tif', 'yesretinas_b_WT2_C1.tif', 
-          'yesretinas_c_WT3_C1.tif','yesretinas_e_KO1_C1.tif',
-          'yesretinas_f_KO2_C1.tif','yesretinas_g_KO3_C1.tif',
-          'yesretinas_h_KO4_C1.tif']
-
-        masks2d_names = ['PBS_new_ret1_stiched_mask', 'sFlt1_ret2-02_mask', 'VEGF_ret1-02_mask', 'Wnt5aWT_AngII_Ret7_tile1_mask', 'PBS_new_ret1b_stiched_mask', 
-        'PBS_old_ret1_mask','Wnt5aWT_AngII_Ret7_tile2_mask',
-        'VEGF_Ret1_tile1_stitched_mask', 'hemaxi_icam_2d_mask', 'PBS_ret1-02-stiched_mask',  'PBS_ret4_stiched_mask', 
-        'sFlt1_ret2-03_mask', 'sFLT1_ret3_mask',
-        'VEGF_ret1-03_mask', 'Wnt5aWT_PBS_Ret5_tile1_mask', 'Captopril_new_ret1_mask.tif','Captopril_new_ret2_mask.tif',
-        'Captopril_new_ret3_mask.tif', 'iROCK_ret3_mask.tif','Maria_Captopril_ret6_mask.tif', 'PBS_ret1-02_mask.tif','Ret4_Maria_Captopril_1_mask.tif',
-        'Ret5_Maria_Captopril_2_mask.tif', 'RGDS-ret1_mask.tif', 'RGDS-ret2_mask.tif','RGDS-ret3_mask.tif', 'RGDS-ret4_mask.tif',
-        'sFlt1_ret4_mask.tif','sFlt1_ret5_mask.tif', 'VEGF_ret4_mask.tif','VEGF_ret5_mask.tif', 'VEGF_ret6_mask.tif', 'VEGF_ret7_mask.tif',
-        'FLIJ10_TG_stiching_2ndExp_1.tif', 'FLIJ11_TG_stiching_2ndExp_1.tif', 
-          'FLIJ7_TG_stiching_1.tif', 'FLIJ7_TG_stiching_2ndExp_1.tif', 
-          'FLIJ8_WT_stiching_2ndExp_1.tif', 'FLIJ9_TG_stiching_1.tif', 
-          'FLIJ9_TG_stiching_2ndExp_1.tif', 'FLIO1a_TG_stiching_2ndExp_2.tif', 
-          'FLIO1b_TG_stiching_2ndExp_1.tif', 'FLIO4_TG_stiching_2ndExp_1.tif', 
-          'FLIO5_TG_stiching_2ndExp_1.tif', 'FLIO6_TG_stiching_1.tif',
-          'FLIO6_TG_stiching_2.tif', 'FLIO6_TG_stiching_3.tif', 
-           'FLIO8_TG_stiching_1.tif', 
-          'FLIP1_TG_stiching_1.tif', 'FLIP1_TG_stiching_1Exp_1.tif',
-          'FLIP1_TG_stiching_1Exp_2.tif', 'FLIP1_TG_stiching_1Exp_3.tif', 
-          'FLIP1_TG_stiching_2.tif', 'FLIP5_WT_stiching_2ndExp_1.tif',
-          'yesretinas_a_WT1_C1.tif', 'yesretinas_b_WT2_C1.tif', 
-          'yesretinas_c_WT3_C1.tif','yesretinas_e_KO1_C1.tif',
-          'yesretinas_f_KO2_C1.tif','yesretinas_g_KO3_C1.tif',
-          'yesretinas_h_KO4_C1.tif']
-
-        folds_ = [1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
-        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4]
-
 
     _patch_size = patch_size[1]
     _nbslices = patch_size[0]
 
+    for img_name in os.listdir(img_dir):
 
-    for img, mask2d, fold in zip(images_names, masks2d_names, folds_):
-
-        print('Image Name: {}'.format(img))
-
-        img_dir = images_all_dir[fold-1]
-
-        #crop the image (according to the overlap between gt 2d mask and image)
-
-
-        if fold==1:
-            image = imread(os.path.join(img_dir, img + '.tif'))
-        elif fold==2 or fold==3 or fold==4:
-            image = imread(os.path.join(img_dir, img))
-
-        mip_img = np.max(image, axis=2) #maximum intensity projection
+        print('Image Name: {}'.format(img_name))
+        image = imread(os.path.join(img_dir, img_name))
 
         print('Image Shape: {}'.format(image.shape))
         print('----------------------------------------')
@@ -109,25 +37,20 @@ def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_
         new_size_y = int((size_y/_patch_size) + 1) * _patch_size
         new_size_x = int((size_x/_patch_size) + 1) * _patch_size
         new_size_z = int((size_depth/_patch_size_z) + 1) * _patch_size_z
-        
         aux_sizes = [new_size_y, new_size_x, new_size_z]
         
         ## zero padding
-        aux_img = np.random.randint(1,11,(aux_sizes[0], aux_sizes[1], aux_sizes[2]))
+        aux_img = np.random.randint(1,50,(aux_sizes[0], aux_sizes[1], aux_sizes[2]))
         aux_img[0:aux_sizes_or[0], 0:aux_sizes_or[1],0:aux_sizes_or[2]] = image
         image = aux_img
         del aux_img
             
-        
         final_mask_foreground = np.zeros((np.shape(image)[0], np.shape(image)[1], np.shape(image)[2]))
         final_mask_background = np.zeros((np.shape(image)[0], np.shape(image)[1], np.shape(image)[2]))
         final_mask_background = final_mask_background.astype('uint8')
         final_mask_foreground = final_mask_foreground.astype('uint8')
         
         i=0
-
-        #load the model
-        model_BtoA = load_model('model.h5', cust)
 
         while i+_patch_size<=image.shape[0]:
             j=0
@@ -166,8 +89,6 @@ def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_
         del _slice
         del A_generated
         del B_real
-        del model_BtoA
-
 
         final_mask = (final_mask_foreground>=final_mask_background)*1
 
@@ -180,6 +101,6 @@ def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_
         print('----------------------------------------')
         final_mask = final_mask*255.0
         final_mask = final_mask.astype('uint8')
-        imwrite(os.path.join(save_dir_3dmasks, img+'.tif'), final_mask)
-        seg = np.max(final_mask, axis=2)  #####
-        imwrite(os.path.join(save_dir_2dmasks, img + '.tif'), seg)
+        imwrite(os.path.join(save_dir_3dmasks, img_name), final_mask)
+        seg = np.max(final_mask, axis=2) 
+        imwrite(os.path.join(save_dir_2dmasks, img_name), seg)
