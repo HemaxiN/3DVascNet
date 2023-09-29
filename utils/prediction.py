@@ -94,10 +94,6 @@ def predict(model_dir, images_all_dir, save_dir_2dmasks, save_dir_3dmasks, mode_
         elif fold==2 or fold==3 or fold==4:
             image = imread(os.path.join(img_dir, img))
 
-
-        if image.shape[2]>64: #happens for hemaxi_icam2
-                image = image[:,:,0:64]
-
         mip_img = np.max(image, axis=2) #maximum intensity projection
 
         print('Image Shape: {}'.format(image.shape))
