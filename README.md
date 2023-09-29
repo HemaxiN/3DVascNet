@@ -1,7 +1,7 @@
 # 3D Vessel Segmentation
 3DVascNet: A Deep Learning-Based Approach for 3D Vessel Segmentation and Quantification in Microscopy Images of Mouse Retinas 
 
-This repository contains the Python implementation of a 3D cycleGAN model to segment blood vessels in 3D microscopy images of mouse retinas. It also contains the code of the automatic pipeline developed for the quantification of the vascular network based on the segmentation masks. Moreover, the instructions for downloading and using our interface can be found in this repository.
+This repository contains the Python implementation of a 3D CycleGAN model to segment blood vessels in 3D microscopy images of mouse retinas. It also contains the code of the automatic pipeline developed for the quantification of the vascular network based on the segmentation masks. Moreover, the instructions for downloading and using our interface can be found in this repository.
 
 
 ## Architecture
