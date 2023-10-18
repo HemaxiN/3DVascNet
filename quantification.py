@@ -12,9 +12,11 @@ import tifffile
 import scipy.ndimage as ndi
 from utils.ConcaveHull import concaveHull
 from PIL import Image, ImageDraw
+from scipy.sparse.csgraph import shortest_path
+from skan.csr import skeleton_to_csgraph
 
-masks_dir = r'C:\Users\hemax\Desktop\testing\masks_proc'
-resolution_file = r'C:\Users\hemax\Desktop\testing\resolution.xlsx'
+masks_dir = r'/mnt/2TBData/hemaxi/cycleGAN/26_05_2022/models_01_07/masks_proc'
+resolution_file = r'/mnt/2TBData/hemaxi/Downloads/resolution.xlsx'
 
 resolution = pd.read_excel(resolution_file)
 
@@ -37,6 +39,178 @@ def branching_points(branch_data):
             end_points=end_points+1
             epoints_id.append(element)
     return branch_points, bpoints_id, end_points, epoints_id
+
+
+def radius_3d_main(skeleton, branch_data, mask, boundary):
+    pixel_graph, coordinates_ = skeleton_to_csgraph(skeleton, spacing=[1,1,1])
+    dist_matrix, predecessors = shortest_path(pixel_graph, directed=True, indices=branch_data['node-id-src'].to_numpy(), return_predecessors=True)
+    #dist_matrix has size (#sourceids as in len(branch_data['node-id-src']), #all nodes in the skeleton)
+    
+    ## iterate through each branch and check the direction
+    all_major = []
+    all_minor = []
+    all_radii = []
+
+    for i in range(len(branch_data)):
+        
+        #node indices (i is the node-id-src, because it was used before to compute dist_matrix and predecessors)
+        b =  int(branch_data.iloc[i]['node-id-dst']) 
+
+        # Check if there is a path between the two nodes (a and b)
+        if np.isinf(dist_matrix[i, b]):
+            print("No path exists between node a and node b.")
+            continue
+        else:
+            # Reconstruct the path from a to b
+            path = [(coordinates_[0][b], coordinates_[1][b], coordinates_[2][b])]
+            b = predecessors[i, b]
+            while b >= 0:
+                path.insert(0, (coordinates_[0][b], coordinates_[1][b], coordinates_[2][b]))
+                b = predecessors[i, b]
+
+            path = np.asarray(path)
+            #print("Shortest path:", path)        
+
+            #compute the direction of the branch
+            delta_x = (branch_data.iloc[i]['image-coord-src-0'])-(branch_data.iloc[i]['image-coord-dst-0'])
+            delta_y = (branch_data.iloc[i]['image-coord-src-1'])-(branch_data.iloc[i]['image-coord-dst-1'])
+            delta_z = (branch_data.iloc[i]['image-coord-src-2'])-(branch_data.iloc[i]['image-coord-dst-2'])
+
+            direction_unit = np.asarray([delta_x, delta_y, delta_z])
+            direction_unit = direction_unit / np.linalg.norm(direction_unit)
+
+            major_axes, minor_axes, radii = compute_radii_aux(path, mask, boundary, direction_unit)
+
+            all_major = all_major + major_axes
+            all_minor = all_minor + minor_axes
+            all_radii = all_radii + radii
+                
+    return np.asarray(all_major), np.asarray(all_minor), np.asarray(all_radii)
+
+def extract_2d_slice(segmentation_mask, boundary, point, direction_unit, radius=20):
+    D = np.dot(direction_unit, point)
+    min_point = np.maximum(point - radius, [0, 0, 0])
+    max_point = np.minimum(point + radius, segmentation_mask.shape)
+    
+    grid_x, grid_y, grid_z = np.meshgrid(
+        np.arange(min_point[0], max_point[0]),
+        np.arange(min_point[1], max_point[1]),
+        np.arange(min_point[2], max_point[2]),
+        indexing='ij')
+    
+    voxel_centers = np.column_stack((grid_x.ravel(), grid_y.ravel(), grid_z.ravel()))
+    distances = np.abs(np.dot(voxel_centers, direction_unit) - D)
+    plane = (distances < 0.5).reshape(grid_x.shape)
+    
+    out_mask = np.zeros(plane.shape)
+    out_mask = np.logical_and(plane, segmentation_mask[min_point[0]:max_point[0], min_point[1]:max_point[1], min_point[2]:max_point[2]])
+    
+    out_boundary = np.zeros(boundary.shape)
+    out_boundary = np.logical_and(plane, boundary[min_point[0]:max_point[0], min_point[1]:max_point[1], min_point[2]:max_point[2]])
+    
+    new_point = point * (min_point == 0) + radius * (min_point != 0)
+
+    #tifffile.imwrite('testingggggg.tif', (plane*255.0).astype('uint8'))
+    #input('press enter')
+    return out_boundary, out_mask, new_point
+
+def compute_radii_aux(path, mask, boundary, direction_unit):
+    major_axes = []
+    minor_axes = []
+    radii = []
+
+    tam_ = np.shape(path)[0]
+
+    #positions_ = (np.asarray([1/2, 1/3, 2/3, 1/4, 3/4])*tam_).astype('uint8')
+    first_point = True
+    for p in range(int(tam_/2), tam_):
+
+        point = np.asarray(path[p])
+        #print(point)
+
+        aux_boundary, aux_mask, point = extract_2d_slice(mask, boundary, point, direction_unit)
+
+        aux_mask = label(aux_mask)
+        
+        l = aux_mask[point[0], point[1], point[2]]
+        
+        aux_boundary[aux_mask!=l] = 0
+        
+        #tifffile.imwrite('auxbound.tif', (aux_boundary*255.0).astype('uint8'))
+        #tifffile.imwrite('auxmask.tif', (aux_mask*255.0).astype('uint8'))
+
+        #input('Press enter')
+        
+        indices_ = np.argwhere(aux_boundary) # get indices of the contour
+
+        if np.shape(indices_)[0]>0:
+
+            all_distances = np.sqrt(np.sum((indices_ - point)**2, axis=-1)) #Euclidean distance
+            #from the point to each point in the boundary
+
+            major_curr = np.max(all_distances)
+            minor_curr = np.min(all_distances)
+            
+            if first_point:
+                major_axes.append(major_curr)
+                minor_axes.append(minor_curr)
+                radii.append(np.mean(all_distances))
+                first_point = False
+            else:
+                delta_radius_major = np.abs(major_curr-major_axes[-1])
+                delta_radius_minor = np.abs(minor_curr-minor_axes[-1])
+                if delta_radius_major<4:
+                    major_axes.append(major_curr)
+                    minor_axes.append(minor_curr)
+                    radii.append(np.mean(all_distances))
+                else:
+                    break
+            
+    path = np.flip(path,0)
+    for p in range(int(tam_/2), tam_):
+
+        point = np.asarray(path[p])
+        #print(point)
+
+        aux_boundary, aux_mask, point = extract_2d_slice(mask, boundary, point, direction_unit)
+
+        aux_mask = label(aux_mask)
+        
+        l = aux_mask[point[0], point[1], point[2]]
+        
+        aux_boundary[aux_mask!=l] = 0
+        
+        #tifffile.imwrite('auxbound.tif', (aux_boundary*255.0).astype('uint8'))
+        #tifffile.imwrite('auxmask.tif', (aux_mask*255.0).astype('uint8'))
+
+        #input('Press enter')
+        
+        indices_ = np.argwhere(aux_boundary) # get indices of the contour
+
+        if np.shape(indices_)[0]>0:
+
+            all_distances = np.sqrt(np.sum((indices_ - point)**2, axis=-1)) #Euclidean distance
+            #from the point to each point in the boundary
+            
+            major_curr = np.max(all_distances)
+            minor_curr = np.min(all_distances)
+            
+            if first_point:
+                major_axes.append(major_curr)
+                minor_axes.append(minor_curr)
+                radii.append(np.mean(all_distances))
+                first_point = False
+            else:
+                delta_radius_major = np.abs(major_curr-major_axes[-1])
+                delta_radius_minor = np.abs(minor_curr-minor_axes[-1])
+                if delta_radius_major<4:
+                    major_axes.append(major_curr)
+                    minor_axes.append(minor_curr)
+                    radii.append(np.mean(all_distances))
+                else:
+                    break
+
+    return major_axes, minor_axes, radii
 
 def compute_chull(mask):
     mask = np.max(mask, axis=-1)
@@ -170,24 +344,21 @@ for msk_name in os.listdir(masks_dir):
     bpoints, bids, epoints, eids = branching_points(branch_data)
     
     print('Skeletons Features Computed')
-    mask = mask_roi #select the region of interest
+    mask[chull_3d==0] = 0
     mask = (mask*1).astype('uint8')
 
-    print('Mask Shape: {}'.format(np.shape(mask)))
+    ellipsoid = draw.ellipsoid(1,1,1, spacing=(1,1,1), levelset=False)
+    ellipsoid = ellipsoid.astype('uint8')
 
-    distance_transform = ndi.distance_transform_edt(mask, sampling=[1,1,1]).astype(np.float32)
+    er = binary_erosion(mask, ellipsoid)
+    boundaries = mask - er
 
-    print('Distance Transform Computed')
-    #distance_transform = distance_transform_edt(mask, sampling=[dimx, dimy, dimz])
-    skeleton = skeleton.astype(distance_transform.dtype)
-    radius_values = cv2.multiply(skeleton, distance_transform)
-    #radius_values = radius_values  #physical units
-    radius_ = np.mean(radius_values[radius_values!=0])
+    major_axes_final, minor_axes_final, radii_final = radius_3d_main(skeleton, branch_data, mask, boundaries)
     
     #add the features to the pandas dataframe
     vessel_features.loc[i] = [msk_name, msk_name.split('_')[0], bpoints/total_area, 
                                       vasc_dens, avas_area, 
-                                     (branch_data['branch-distance']).mean(), radius_]
+                                     (branch_data['branch-distance']).mean(), np.mean(radii_final)]
     i +=1
     
 vessel_features.to_csv('features3d.csv', index=False, sep=';')  #um and concave hull do gt, masks cycçlegan 10092022,postprocessed
