@@ -15,8 +15,8 @@ from PIL import Image, ImageDraw
 from scipy.sparse.csgraph import shortest_path
 from skan.csr import skeleton_to_csgraph
 
-masks_dir = r'/mnt/2TBData/hemaxi/cycleGAN/26_05_2022/models_01_07/masks_proc'
-resolution_file = r'/mnt/2TBData/hemaxi/Downloads/resolution.xlsx'
+masks_dir = r'C:\Users\hemax\Desktop\images\results\aa'
+resolution_file = r'C:\Users\hemax\Desktop\images\resolution.xlsx'
 
 resolution = pd.read_excel(resolution_file)
 
@@ -110,23 +110,17 @@ def extract_2d_slice(segmentation_mask, boundary, point, direction_unit, radius=
     
     new_point = point * (min_point == 0) + radius * (min_point != 0)
 
-    #tifffile.imwrite('testingggggg.tif', (plane*255.0).astype('uint8'))
-    #input('press enter')
     return out_boundary, out_mask, new_point
 
 def compute_radii_aux(path, mask, boundary, direction_unit):
     major_axes = []
     minor_axes = []
     radii = []
-
     tam_ = np.shape(path)[0]
-
-    #positions_ = (np.asarray([1/2, 1/3, 2/3, 1/4, 3/4])*tam_).astype('uint8')
     first_point = True
     for p in range(int(tam_/2), tam_):
 
         point = np.asarray(path[p])
-        #print(point)
 
         aux_boundary, aux_mask, point = extract_2d_slice(mask, boundary, point, direction_unit)
 
@@ -135,11 +129,6 @@ def compute_radii_aux(path, mask, boundary, direction_unit):
         l = aux_mask[point[0], point[1], point[2]]
         
         aux_boundary[aux_mask!=l] = 0
-        
-        #tifffile.imwrite('auxbound.tif', (aux_boundary*255.0).astype('uint8'))
-        #tifffile.imwrite('auxmask.tif', (aux_mask*255.0).astype('uint8'))
-
-        #input('Press enter')
         
         indices_ = np.argwhere(aux_boundary) # get indices of the contour
 
@@ -170,7 +159,6 @@ def compute_radii_aux(path, mask, boundary, direction_unit):
     for p in range(int(tam_/2), tam_):
 
         point = np.asarray(path[p])
-        #print(point)
 
         aux_boundary, aux_mask, point = extract_2d_slice(mask, boundary, point, direction_unit)
 
@@ -179,11 +167,6 @@ def compute_radii_aux(path, mask, boundary, direction_unit):
         l = aux_mask[point[0], point[1], point[2]]
         
         aux_boundary[aux_mask!=l] = 0
-        
-        #tifffile.imwrite('auxbound.tif', (aux_boundary*255.0).astype('uint8'))
-        #tifffile.imwrite('auxmask.tif', (aux_mask*255.0).astype('uint8'))
-
-        #input('Press enter')
         
         indices_ = np.argwhere(aux_boundary) # get indices of the contour
 
