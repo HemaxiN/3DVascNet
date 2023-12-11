@@ -15,8 +15,8 @@ from PIL import Image, ImageDraw
 from scipy.sparse.csgraph import shortest_path
 from skan.csr import skeleton_to_csgraph
 
-masks_dir = r'C:\Users\hemax\Desktop\images\results\aa'
-resolution_file = r'C:\Users\hemax\Desktop\images\resolution.xlsx'
+masks_dir = r'/mnt/2TBData/hemaxi/cycleGAN/26_05_2022/models_01_07/masks_proc'
+resolution_file = r'/mnt/2TBData/hemaxi/Downloads/resolution.xlsx'
 
 resolution = pd.read_excel(resolution_file)
 
