@@ -25,7 +25,7 @@ def post_processing(msk_dir, save_dir_masks3d, save_dir_masks2d, mode_):
             if region.area > max_:
                 max_ = region.area
 
-        properties = [a for a in properties if a.area>= max_-10]
+        properties = [a for a in properties if a.area>= max_*0.5]
 
         ## remove small regions from the mask as well
         mask_aux = np.zeros(np.shape(final_mask))
