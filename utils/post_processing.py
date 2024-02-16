@@ -25,12 +25,12 @@ def post_processing(msk_dir, save_dir_masks3d, save_dir_masks2d, resolution_file
             #remove outliers
             print('Remove the Outliers')
             labeled_image = label(final_mask)
-            properties = regionprops(labeled_image, spacing=(dim_x, dim_y, dim_z))
+            properties = regionprops(labeled_image)
 
             mask = np.zeros(np.shape(final_mask)).astype('uint8')
 
             for prop in properties:
-                area_ = prop.area
+                area_ = prop.area*(dim_x*dim_y*dim_z)
                 print(area_)
                 if area_ < 50000 and area_ >= 1000:
                     conv = prop.area/prop.area_convex
