@@ -25,7 +25,7 @@ If you are having issues installing keras_contrib, use: ```pip install git+https
 
 ### Pre-Processing
 
-To apply the pre-processing vessel enhancement method run the file [percentile.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/percentile.py). Moreover, the code to convert the ```.stl``` objects (3D segmentation masks obtained with [PolNet](https://github.com/mobernabeu/polnet)) into 3D ```.tif``` files is provided in the jupyter notebook [STL2Voxel.ipynb](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/STL2Voxel.ipynb).
+To apply the pre-processing vessel enhancement method run the file [percentile.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/percentile.py). Moreover, the code to convert the ```.stl``` objects (3D segmentation masks obtained with [PolNet](https://github.com/mobernabeu/polnet)) into 3D ```.tif``` files is provided in the jupyter notebook [STL2Voxel.ipynb](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/preprocessing/STL2Voxel.ipynb). Note that while percentile normalization with values of 1 and 99 is effective for single-layer vasculature (P6 retinas), it may not be optimal for complex vasculatures with substantial intensity variations between different vessel layers as observed in adult retinas. In such cases, we have found that using percentiles of 0.5 and 99.5 yields better results. Thus, percentile normalization parameters may need to be adjusted according to the user's specific dataset requirements.
 
 
 ### Testing the Pre-trained Model on Your Own Dataset
