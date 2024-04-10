@@ -19,9 +19,9 @@ The dataset *will be soon* made publicly available [here](https://huggingface.co
 
 ### Requirements
 
-Python 3.5.2, Keras 2.2.4 and other packages listed in [requirements.txt](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/utils/requirements.txt).
+The code was initially developed in Python 3.5.2, using Keras 2.2.4. 
 
-If you are having issues installing keras_contrib, use: ```pip install git+https://www.github.com/keras-team/keras-contrib.git```.
+Now it has been updated to work in Python 3.10, the required packages are listed in [requirements.txt](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/utils/requirements.txt).
 
 ### Pre-Processing
 
