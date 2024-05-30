@@ -2,7 +2,19 @@
 
 This repository contains the Python implementation of a [3D CycleGAN model to segment blood vessels in 3D microscopy images of mouse retinas](https://github.com/HemaxiN/3DVascNet/tree/main#segmentation). It also contains the code of the automatic pipeline developed for the [quantification of the vascular network based on the segmentation masks](https://github.com/HemaxiN/3DVascNet/tree/main#vasculature-quantification). Moreover, the instructions for downloading and using our interface can be found in [this repository](https://github.com/HemaxiN/3DVascNet/tree/main#graphical-user-interface---3dvascnet).
 
-This work was accepted for publication in [Arteriosclerosis, Thrombosis, and Vascular Biology ATVB](https://www.ahajournals.org/doi/abs/10.1161/ATVBAHA.124.320672).
+This is the official implementation of the paper: [3DVascNet](https://www.ahajournals.org/doi/abs/10.1161/ATVBAHA.124.320672). 
+
+## How to cite
+
+```bibtex
+@article{narotamo20243dvascnet,
+  title={3DVascNet: An Automated Software for Segmentation and Quantification of Mouse Vascular Networks in 3D},
+  author={Narotamo, Hemaxi and Silveira, Margarida and Franco, Cl{\'a}udio A},
+  journal={Arteriosclerosis, Thrombosis, and Vascular Biology},
+  year={2024},
+  publisher={Am Heart Assoc}
+}
+```
 
 ## Segmentation
 
