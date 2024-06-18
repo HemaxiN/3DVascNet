@@ -11,16 +11,6 @@
 import numpy as np
 import scipy.spatial as spt
 import matplotlib
-#matplotlib.use('Agg')
-
-#!/bin/env python
-
-##
-## determine if two line segments intersect
-## see: martin-thoma.com/how-to-check-if-two-line-segments-intersect/
-##
-
-import numpy as np
 
 def doBoundingBoxesIntersect(a, b, c, d):
     '''
@@ -249,6 +239,8 @@ def concaveHull(dataset, k):
                     its = doLinesIntersect(hull[step-1-1], cPoints[i-1],
                             hull[step-1-j-1],hull[step-j-1])
                     j=j+1
+        if k>50:
+            return [[0,0],[0,0]]
         if ( its==True ):
             print("all candidates intersect -- restarting with k = ",k+1)
             return concaveHull(dataset,k+1)
