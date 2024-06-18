@@ -14,6 +14,7 @@ from utils.ConcaveHull import concaveHull
 from PIL import Image, ImageDraw
 from scipy.sparse.csgraph import shortest_path
 from skan.csr import skeleton_to_csgraph
+from scipy import ndimage
 
 masks_dir = r'/mnt/2TBData/hemaxi/cycleGAN/26_05_2022/models_01_07/masks_proc'
 resolution_file = r'/mnt/2TBData/hemaxi/Downloads/resolution.xlsx'
@@ -196,11 +197,15 @@ def compute_radii_aux(path, mask, boundary, direction_unit):
     return major_axes, minor_axes, radii
 
 def compute_chull(mask):
+    ry = 100
+    rx = 100
+    #mask = tifffile.imread(msk)
     mask = np.max(mask, axis=-1)
+    print('mask shape: {}'.format(np.shape(mask)))
     x,y = np.shape(mask)
-    mask = cv2.resize(mask, (100,100)) #resize the mask to decrease computational cost
+    mask = cv2.resize(mask, (ry,rx)) #resize the mask to decrease computational cost
     mask[mask!=0] = 255.0
-    mask_edges = mask - (ndi.morphology.binary_erosion(mask)*255.0) #obtain the edges to compute concave hull
+    mask_edges = mask - (ndimage.morphology.binary_erosion(mask)*255.0) #obtain the edges to compute concave hull
 
     #get the coordinates (x,y) of the points belonging to the edges of the mask
     rows, cols = np.where(mask_edges == 255)
@@ -217,47 +222,51 @@ def compute_chull(mask):
         polygon.append(hull[i][0])
         polygon.append(hull[i][1])
 
-    img = Image.new('L', (100,100), 0)
-    ImageDraw.Draw(img).polygon(polygon, outline=1, fill=1)
-    chull = np.array(img)
+    if sum(polygon)==0:
+        chull = convex_hull_image(mask)
+        final_chull = ((chull/np.max(chull))*1).astype('uint8')
+    else:
+        img = Image.new('L', (ry,rx), 0)
+        ImageDraw.Draw(img).polygon(polygon, outline=1, fill=1)
+        chull = np.array(img)
 
-    #resize to the original size
-    chull = cv2.resize(chull,(y,x))
+        #resize to the original size
+        chull = cv2.resize(chull,(y,x))
 
-    #save the concave hull
-    chull = (chull*255.0).astype('uint8')
+        #save the concave hull
+        chull = (chull*255.0).astype('uint8')
 
-    #invert the convex hull for post-processing
-    chull = 255.0 - chull
+        #invert the convex hull for post-processing
+        chull = 255.0 - chull
 
-    properties = regionprops(label(chull))
+        properties = regionprops(label(chull))
 
-    a=[]
-    for r in properties:
-        a.append(r.area)
+        a=[]
+        for r in properties:
+            a.append(r.area)
 
-    max_ = max(a)
+        max_ = max(a)
 
-    properties = [a for a in properties if a.area >= 0.05*max_]
-    ## remove small regions from the mask as well
-    chull_proc = np.zeros(np.shape(chull))
-    for r in properties:
-        chull_proc[r._label_image==r.label]=1
+        properties = [a for a in properties if a.area >= 0.05*max_]
+        ## remove small regions from the mask as well
+        chull_proc = np.zeros(np.shape(chull))
+        for r in properties:
+            chull_proc[r._label_image==r.label]=1
 
-    #erode the processed chull
-    chull_proc = chull_proc.astype('uint8')
-    kernel = np.ones((55,55),np.uint8)
-    chull_proc = cv2.erode(chull_proc,kernel,iterations = 1)
+        #erode the processed chull
+        chull_proc = chull_proc.astype('uint8')
+        kernel = np.ones((55,55),np.uint8)
+        chull_proc = cv2.erode(chull_proc,kernel,iterations = 1)
 
-    #invert again
-    chull_proc = 1-chull_proc
-    chull_proc = (chull_proc*255.0).astype('uint8')
+        #invert again
+        chull_proc = 1-chull_proc
+        chull_proc = (chull_proc*255.0).astype('uint8')
 
-    #median filter to reduce staircase like borders
-    final_chull = signal.medfilt2d(chull_proc, 55)
-
-    final_chull = final_chull/np.max(final_chull)
-    final_chull = (final_chull*1).astype('uint8')
+        #median filter to reduce staircase like borders
+        final_chull = signal.medfilt2d(chull_proc, 55)
+    
+        final_chull = final_chull/np.max(final_chull)
+        final_chull = (final_chull*1).astype('uint8')
 
     return final_chull
 
