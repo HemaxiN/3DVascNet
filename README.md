@@ -75,6 +75,19 @@ train_dir
 
 To test the trained model on new images specify the directories in file [predict_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/predict_main.py) and run it.
 
+*Update August 29, 2024*
+- The resolution file is now required as input for the prediction model. This file is used to obtain percentile equalization values (pre-processing step) and to resize images if the ```_resize``` flag is True.
+
+The resolution.xlsx file should have the following structure:
+
+![](https://github.com/HemaxiN/3DVascNet/blob/main/images/resolutionfile.PNG)
+
+- Added a ```norm_``` parameter (True or False) to control whether percentile equalization is applied. When set to True, percentile equalization parameters will be automatically extracted from the resolution file.
+- Added a ```_resize``` parameter (True or False) to determine if images should be resized to match the resolution of the training images.
+- Implemented a progress bar to monitor the prediction process.
+- Image channels are now automatically transposed so that the output dimensions are (X, Y, Z).
+
+
 ### Post-Processing and Evaluation
 
 Post-Processing methods can be applied to the predicted segmentation masks using the file [post_proc_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/post_proc_main.py); and the performance of the model can be evaluated using [eval_main.py](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/eval_main.py), which writes a ```results.csv```file:
@@ -107,7 +120,7 @@ The model that achieved the best performance is made publicly available [here](h
 ## Vasculature Quantification
 
 The code for feature extraction from the segmentation masks of vessels is provided in this [script](https://github.com/HemaxiN/3DVascNet/blob/main/quantification.py). 
-First, you should change the ```masks_dir```and ```resolution_file```variables, which correspond respectively to the directory where the 3D post-processed masks are saved and the path to a resolution.xlsx file containing details about the voxel's physical sizes for each image.
+First, you should change the ```masks_dir``` and ```resolution_file``` variables, which correspond respectively to the directory where the 3D post-processed masks are saved and the path to a resolution.xlsx file containing details about the voxel's physical sizes for each image.
 The resolution.xlsx file should have the following structure:
 
 ![](https://github.com/HemaxiN/3DVascNet/blob/main/images/resolutionfile.PNG)
