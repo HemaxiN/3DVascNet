@@ -4,11 +4,11 @@ This repository contains the Python implementation of a [3D CycleGAN model to se
 
 This is the official implementation of the paper: [3DVascNet](https://www.ahajournals.org/doi/abs/10.1161/ATVBAHA.124.320672). 
 
-## Acknowledgements 💡
+## Acknowledgements ✨
 
 The code is continuously improved thanks to the valuable feedback from fellow researchers: Nekane Maritorena Hualde, Olya Oppenheim, and Tom Van de Kemp. I'm truly grateful for their feedback and comments!
 
-Happy coding, and keep the feedback coming! 💻✉️
+Happy coding, and keep the feedback coming! 💻🚀✉️
 
 ## How to cite
 
