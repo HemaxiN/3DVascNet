@@ -8,7 +8,7 @@ This is the official implementation of the paper: [3DVascNet](https://www.ahajou
 
 The code is continuously improved thanks to the valuable feedback from fellow researchers: Nekane Maritorena Hualde, Olya Oppenheim, and Tom Van de Kemp. I'm truly grateful for their feedback and comments!
 
-Happy coding, and keep the feedback coming! 💻🚀✉️
+Happy coding, and please keep the feedback coming! 💻🚀✉️ I greatly appreciate it!
 
 ## How to cite
 
