@@ -275,7 +275,7 @@ ellipsoid = ellipsoid.astype('uint8')
 ellipsoid = ellipsoid[1:-1,1:-1,1:-1]
 
 vessel_features = pd.DataFrame(columns=('Image', 'Group', 'Branching Points Density',
-                                  'Vessel Density %', 'Avascular Area %', 
+                                  'Vessel Density %', 'Avascular Volume %', 
                                   'Mean Branch Length', 'Mean Vessel Radius'))
 
 i=0
