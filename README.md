@@ -8,7 +8,7 @@ This is the official implementation of the paper: [3DVascNet](https://www.ahajou
 
 You can try our model directly in the browser using the Hugging Face Space:
 
-👉 [3DVascNet]([https://huggingface.co/spaces/YourSpaceName](https://huggingface.co/spaces/Hemaxi/3DVascNet))
+👉 [3DVascNet](https://huggingface.co/spaces/Hemaxi/3DVascNet)
 
 Simply upload a 3D image, segment it, and explore the results interactively!
 
