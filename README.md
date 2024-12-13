@@ -13,7 +13,7 @@ You can try our model directly in the browser using the Hugging Face Space:
 Simply upload a 3D image, segment it, and explore the results interactively!
 
 
-![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/hugging_face.PNG)
+![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/hugging_face_space.PNG)
 
 
 ## Acknowledgements ✨
