@@ -1,8 +1,20 @@
-# 3DVascNet: An Automated Software for 3D Retinal Vascular Networks Segmentation and Quantification
+![image](https://github.com/user-attachments/assets/3446d503-6f67-4609-85ac-df92498ec5af)# 3DVascNet: An Automated Software for 3D Retinal Vascular Networks Segmentation and Quantification
 
 This repository contains the Python implementation of a [3D CycleGAN model to segment blood vessels in 3D microscopy images of mouse retinas](https://github.com/HemaxiN/3DVascNet/tree/main#segmentation). It also contains the code of the automatic pipeline developed for the [quantification of the vascular network based on the segmentation masks](https://github.com/HemaxiN/3DVascNet/tree/main#vasculature-quantification). Moreover, the instructions for downloading and using our interface can be found in [this repository](https://github.com/HemaxiN/3DVascNet/tree/main#graphical-user-interface---3dvascnet).
 
 This is the official implementation of the paper: [3DVascNet](https://www.ahajournals.org/doi/abs/10.1161/ATVBAHA.124.320672). 
+
+### Try Our Model on Hugging Face
+
+You can try our model directly in the browser using the Hugging Face Space:
+
+👉 [3DVascNet]([https://huggingface.co/spaces/YourSpaceName](https://huggingface.co/spaces/Hemaxi/3DVascNet))
+
+Simply upload a 3D image, segment it, and explore the results interactively!
+
+
+![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/hugging_face.PNG)
+
 
 ## Acknowledgements ✨
 
