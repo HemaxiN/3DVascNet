@@ -16,7 +16,7 @@ Simply upload a 3D image, segment it, and explore the results interactively!
 ![](https://github.com/HemaxiN/3DVesselSegmentation/blob/main/images/hugging_face_space.PNG)
 
 
-## Acknowledgements ✨
+## Acknowledgments ✨
 
 The code is continuously improved thanks to the valuable feedback from fellow researchers: Nekane Maritorena Hualde, Olya Oppenheim, and Tom Van de Kemp. I'm truly grateful for their feedback and comments!
 
@@ -169,7 +169,7 @@ Instructions for downloading and using our 3DVascNet software can be found [here
 
 
 
-## Acknowledgements
+## Other repositories
 
 * Code based on the [2D implementation of the cycleGAN](https://machinelearningmastery.com/cyclegan-tutorial-with-keras/);
 * [STL2Voxel](https://github.com/cpederkoff/stl-to-voxel).
