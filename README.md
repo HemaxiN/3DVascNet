@@ -22,7 +22,9 @@ The code is continuously improved thanks to the valuable feedback from fellow re
 
 Happy coding, and please keep the feedback coming! 💻🚀✉️ I greatly appreciate it!
 
-Note: Check [this repository](https://github.com/HemaxiN/transpose_masks_3DVascNet) if you want to visualize the output 3D masks in **Fiji** or **Imaris**.
+## Note 
+
+Check [this repository](https://github.com/HemaxiN/transpose_masks_3DVascNet) if you want to visualize the output 3D masks in **Fiji** or **Imaris**.
 
 ## How to cite
 
